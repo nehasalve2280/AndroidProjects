@@ -49,6 +49,9 @@ public class UsersActivity extends AppCompatActivity {
 
 
             rvUsers = findViewById(R.id.rv_users);
+            progressDoalog = new ProgressDialog(UsersActivity.this);
+
+            progressDoalog.setMessage("Retriving user information..");
             layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             rvUsers.setLayoutManager(layoutManager);
             mAdapter = new UsersAdapter(this);
@@ -58,9 +61,7 @@ public class UsersActivity extends AppCompatActivity {
             int i = RealmController.with(this).getCount();
             if (i < 1) {
                 if (connectionAvailable()) {
-                    progressDoalog = new ProgressDialog(UsersActivity.this);
 
-                    progressDoalog.setMessage("Retriving user information..");
 
                     progressDoalog.show();
                     mController.getdata();
