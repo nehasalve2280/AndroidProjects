@@ -1,11 +1,12 @@
-package com.example.lenovo.nehatestproject;
+package com.example.lenovo.nehatestproject.view.activity.controller;
 
-import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import com.example.lenovo.nehatestproject.api.ApiService;
+import com.example.lenovo.nehatestproject.api.ApiServiceGenerator;
+import com.example.lenovo.nehatestproject.api.response.UserResponse;
+import com.example.lenovo.nehatestproject.database.User;
+import com.example.lenovo.nehatestproject.view.activity.UsersActivity;
 
 import java.util.List;
 
@@ -13,37 +14,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MainActivity extends AppCompatActivity {
-    RecyclerView rvUsers;
-    RecyclerView.LayoutManager layoutManager;
-    UsersAdapter mAdapter;
-    private Realm realm;
-    ProgressDialog progressDoalog;
+public class UsersController {
+    UsersActivity mActivity;
     CompositeDisposable mDisposable=new CompositeDisposable();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        progressDoalog = new ProgressDialog(MainActivity.this);
-
-        progressDoalog.setMessage("Loading....");
-
-        progressDoalog.show();
-        rvUsers = findViewById(R.id.rv_users);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvUsers.setLayoutManager(layoutManager);
-        mAdapter = new UsersAdapter(this);
-        rvUsers.setAdapter(mAdapter);
-        this.realm = RealmController.with(this).getRealm();
-        getdata();
-
+    public UsersController(UsersActivity mActivity) {
+        this.mActivity = mActivity;
     }
-
-    private void getdata() {
+    public void getdata() {
         /*Create handle for the RetrofitInstance interface*/
 
         ApiService service = ApiServiceGenerator.getRetrofitInstance().create(ApiService.class);
@@ -55,14 +35,14 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(List<UserResponse> response) {
                             try {
-                                progressDoalog.dismiss();
+                                mActivity.progressDoalog.dismiss();
 
                                 generateDataList(response);
 
                                 //apiCallback.onSuccess(celebrationListDto);
                                 //TSLog.d(TAG, "getOrders onSuccess", "getOrders Successfully");
                             } catch (Exception e) {
-                                progressDoalog.dismiss();
+                                mActivity.progressDoalog.dismiss();
                                 Log.e("ERROR",  e.toString());
                             }
                         }
@@ -70,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onError(Throwable e) {
                             try {
-                                progressDoalog.dismiss();
+                                mActivity.progressDoalog.dismiss();
                                 Log.e("ERROR2",  e.getMessage());
                                 showData();
                               /*  ApiResponse apiResponse = ErrorUtils.parseThrowable(e);
@@ -83,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     }));
 
         } catch (Exception e) {
-            progressDoalog.dismiss();
+            mActivity.progressDoalog.dismiss();
             Log.e("ERROR3",  e.toString());
         }
 
@@ -91,20 +71,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void generateDataList(List<UserResponse> body) {
         for (UserResponse response:body) {
-            realm.beginTransaction();
-            User user = realm.createObject(User.class);
+            mActivity.realm.beginTransaction();
+            User user =  mActivity.realm.createObject(User.class);
             user.setName(response.getName());
             user.setEmail(response.getEmail());
             user.setId(response.getId());
-            realm.commitTransaction();
+            user.setAddress(response.getAddress().getStreet()+","+response.getAddress().getCity());
+            mActivity.realm.commitTransaction();
         }
         showData();
 
     }
 
-    private void showData() {
-        RealmResults<User> results = realm.where(User.class).findAll();
-        mAdapter.addAll(results);
-        mAdapter.notifyDataSetChanged();
+    public void showData() {
+        RealmResults<User> results =  mActivity.realm.where(User.class).findAll();
+        mActivity.mAdapter.addAll(results);
+        mActivity.mAdapter.notifyDataSetChanged();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.lenovo.nehatestproject;
+package com.example.lenovo.nehatestproject.api;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 

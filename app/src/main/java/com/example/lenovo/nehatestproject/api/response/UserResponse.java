@@ -1,5 +1,6 @@
-package com.example.lenovo.nehatestproject;
+package com.example.lenovo.nehatestproject.api.response;
 
+import com.example.lenovo.nehatestproject.api.response.AddressResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

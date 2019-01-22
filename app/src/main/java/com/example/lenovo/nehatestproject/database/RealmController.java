@@ -1,4 +1,4 @@
-package com.example.lenovo.nehatestproject;
+package com.example.lenovo.nehatestproject.database;
 
 import android.app.Activity;
 import android.app.Application;
@@ -90,5 +90,8 @@ public class RealmController {
                 .contains("title", "Realm")
                 .findAll();
 
+    }
+    public int getCount(){
+        return (int) realm.where(User.class).count();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.lenovo.nehatestproject;
+package com.example.lenovo.nehatestproject.database;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -10,6 +10,15 @@ public class User extends RealmObject {
     private String name;
 
     private String email;
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public int getId() {
         return id;

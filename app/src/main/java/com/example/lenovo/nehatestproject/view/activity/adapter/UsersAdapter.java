@@ -1,4 +1,4 @@
-package com.example.lenovo.nehatestproject;
+package com.example.lenovo.nehatestproject.view.activity.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,6 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+
+import com.example.lenovo.nehatestproject.R;
+import com.example.lenovo.nehatestproject.database.User;
 
 import java.util.ArrayList;
 
@@ -34,6 +38,7 @@ public class UsersAdapter extends RecyclerView.Adapter<MyViewHolder> {
         myViewHolder.tvName.setText(user.getName());
         myViewHolder.tvId.setText(user.getId()+"");
         myViewHolder.tvEmail.setText(user.getEmail());
+        myViewHolder.tvAddress.setText(user.getAddress());
     }
 
     @Override

@@ -1,4 +1,6 @@
-package com.example.lenovo.nehatestproject;
+package com.example.lenovo.nehatestproject.api;
+
+import com.example.lenovo.nehatestproject.api.response.UserResponse;
 
 import java.util.List;
 
